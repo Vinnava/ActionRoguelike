@@ -22,11 +22,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StaticMesh;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<UStaticMeshComponent> StaticMesh;
+	//UStaticMeshComponent* StaticMesh;
 
-	UPROPERTY(VisibleAnywhere)
-	URadialForceComponent* RadialForce;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<URadialForceComponent> RadialForce;
+	//URadialForceComponent* RadialForce;
 
 	UFUNCTION()
 	void OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
