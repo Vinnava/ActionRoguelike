@@ -55,6 +55,8 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
+
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -91,5 +93,11 @@ void ASCharacter::PrimaryAttack()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	
+}
+
+void ASCharacter::Jump()
+{
+	Super::Jump();
 	
 }
