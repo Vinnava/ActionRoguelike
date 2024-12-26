@@ -16,7 +16,7 @@ ASItemChest::ASItemChest()
 	LidMesh = CreateDefaultSubobject<UStaticMeshComponent>("LidMesh");
 	LidMesh->SetupAttachment(BaseMesh);
 
-	TragetPitchRot = 60.0f;
+	TragetPitchRot = 110.0f;
 
 }
 
