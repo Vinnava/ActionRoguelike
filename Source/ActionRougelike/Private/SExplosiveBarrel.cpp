@@ -44,5 +44,9 @@ void ASExplosiveBarrel::OnComponentHit(UPrimitiveComponent* HitComponent, AActor
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	RadialForce->FireImpulse();
+
+	FString CombinedString = FString::Printf(TEXT("Hit Location: %s"), *Hit.ImpactPoint.ToString());
+	DrawDebugString(GetWorld(), Hit.ImpactPoint, CombinedString, nullptr, FColor::Blue, 5.0f, false);
+	
 }
 
