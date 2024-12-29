@@ -32,6 +32,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = Attack)
 	TSubclassOf<AActor> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = Attack)
+	TSubclassOf<AActor> BlackHoleProjectileClass;
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USInteractionComponet> InteractionComp;
@@ -42,11 +45,21 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	FTimerHandle TimerHandle_PrimaryAttack;
 
+	UPROPERTY(VisibleAnywhere)
+	FTimerHandle TimerHandle_BlackHoleAttack;
+
+	void PrimaryInteract();
+
+	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
+
 	void PrimaryAttack();
 
 	void PrimaryAttack_TimeElapsed();
 
-	void PrimaryInteract();
+	void BlackHoleAttack();
+
+	void BlackHoleAttack_TimeElapsed();
+
 
 public:	
 	// Called every frame

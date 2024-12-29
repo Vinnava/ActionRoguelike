@@ -75,9 +75,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
-	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
-
+	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("BlackHoleAttack", IE_Pressed, this, &ASCharacter::BlackHoleAttack);
 
 }
 
@@ -105,6 +105,21 @@ void ASCharacter::MoveRight(float Value)
 }
 
 
+void ASCharacter::Jump()
+{
+	Super::Jump();
+	
+}
+
+void ASCharacter::PrimaryInteract()
+{
+	if (InteractionComp)
+	{
+		InteractionComp->PrimaryInteract();
+	}
+}
+
+
 void ASCharacter::PrimaryAttack()
 {
 	PlayAnimMontage(AttackAnim);
@@ -113,7 +128,32 @@ void ASCharacter::PrimaryAttack()
 	
 }
 
+
 void ASCharacter::PrimaryAttack_TimeElapsed()
+{
+	if (ensure(ProjectileClass))
+		SpawnProjectile(ProjectileClass);
+	
+}
+
+
+void ASCharacter::BlackHoleAttack()
+{
+	PlayAnimMontage(AttackAnim);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_BlackHoleAttack, this, &ASCharacter::BlackHoleAttack_TimeElapsed, 0.2f);
+	
+}
+
+
+void ASCharacter::BlackHoleAttack_TimeElapsed()
+{
+	if (ensure(BlackHoleProjectileClass))
+		SpawnProjectile(BlackHoleProjectileClass);
+}
+
+
+void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 {
 	if (ensure(ProjectileClass))
 	{
@@ -126,17 +166,23 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
 		ObjectQueryParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+
+		FCollisionShape Shape;
+		Shape.SetSphere(20.0f);
 		
 		FHitResult Hit;
-		bool LineHit = GetWorld()->LineTraceSingleByObjectType(Hit, TraceStart, TraceEnd, ObjectQueryParams);
+		//bool LineHit = GetWorld()->LineTraceSingleByObjectType(Hit, TraceStart, TraceEnd, ObjectQueryParams);
 
-		FColor LineColor = LineHit ? FColor::Red : FColor::Green;
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(this);
+
+		//FColor LineColor = LineHit ? FColor::Red : FColor::Green;
 		//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, LineColor, false, 5.0f, 0.0f, 1.0f);
 		
 		FTransform SpawnTM;
 		FRotator SpawnRot;
 		
-		if (LineHit)
+		if (GetWorld()->SweepSingleByObjectType(Hit, TraceStart, TraceEnd, FQuat::Identity, ObjectQueryParams, Shape, Params))
 		{
 			//DrawDebugSphere(GetWorld(), Hit.Location, 10.0f, 32, FColor::Red, false, 2.0f);
 			SpawnRot = UKismetMathLibrary::FindLookAtRotation(HandLocation, Hit.Location);
@@ -152,23 +198,7 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		SpawnParams.Instigator = this;
                 
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+		GetWorld()->SpawnActor<AActor>(ClassToSpawn, SpawnTM, SpawnParams);
 	}
 	
-}
-
-
-void ASCharacter::Jump()
-{
-	Super::Jump();
-	
-}
-
-
-void ASCharacter::PrimaryInteract()
-{
-	if (InteractionComp)
-	{
-		InteractionComp->PrimaryInteract();
-	}
 }
