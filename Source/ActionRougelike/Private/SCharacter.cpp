@@ -78,6 +78,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("BlackHoleAttack", IE_Pressed, this, &ASCharacter::BlackHoleAttack);
+	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &ASCharacter::Dash);
 
 }
 
@@ -129,20 +130,27 @@ void ASCharacter::PrimaryAttack()
 }
 
 
-void ASCharacter::PrimaryAttack_TimeElapsed()
-{
-	if (ensure(ProjectileClass))
-		SpawnProjectile(ProjectileClass);
-	
-}
-
-
 void ASCharacter::BlackHoleAttack()
 {
 	PlayAnimMontage(AttackAnim);
 
 	GetWorldTimerManager().SetTimer(TimerHandle_BlackHoleAttack, this, &ASCharacter::BlackHoleAttack_TimeElapsed, 0.2f);
 	
+}
+
+
+void ASCharacter::Dash()
+{
+	PlayAnimMontage(AttackAnim);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_Dash, this, &ASCharacter::Dash_TimeElapsed, 0.2f);
+}
+
+
+void ASCharacter::PrimaryAttack_TimeElapsed()
+{
+	if (ensure(ProjectileClass))
+		SpawnProjectile(ProjectileClass);
 }
 
 
@@ -153,14 +161,28 @@ void ASCharacter::BlackHoleAttack_TimeElapsed()
 }
 
 
+void ASCharacter::Dash_TimeElapsed()
+{
+	if (ensure(DashProjectileClass))
+		SpawnProjectile(DashProjectileClass);
+}
+
+
 void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 {
 	if (ensure(ProjectileClass))
 	{
 		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+
+		/*
+		//(Previously used Start&End)Not using this because the start location is the exact camera location. So, it's colliding with wall
 		
 		FVector TraceStart = CameraComp->GetComponentLocation();
 		FVector TraceEnd = CameraComp->GetComponentLocation() + (GetControlRotation().Vector() * 5000);
+		*/
+
+		FVector TraceStart = CameraComp->GetComponentLocation() + (CameraComp->GetForwardVector()*SpringArmComp->TargetArmLength);
+		FVector TraceEnd = TraceStart + (GetControlRotation().Vector() * 5000);
 
 		FCollisionObjectQueryParams ObjectQueryParams;
 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
@@ -171,13 +193,16 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 		Shape.SetSphere(20.0f);
 		
 		FHitResult Hit;
-		//bool LineHit = GetWorld()->LineTraceSingleByObjectType(Hit, TraceStart, TraceEnd, ObjectQueryParams);
 
 		FCollisionQueryParams Params;
 		Params.AddIgnoredActor(this);
 
-		//FColor LineColor = LineHit ? FColor::Red : FColor::Green;
-		//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, LineColor, false, 5.0f, 0.0f, 1.0f);
+		
+		//Debug Line
+		bool LineHit = GetWorld()->LineTraceSingleByObjectType(Hit, TraceStart, TraceEnd, ObjectQueryParams);
+		FColor LineColor = LineHit ? FColor::Red : FColor::Green;
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, LineColor, false, 5.0f, 0.0f, 1.0f);
+
 		
 		FTransform SpawnTM;
 		FRotator SpawnRot;
@@ -199,6 +224,8 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 		SpawnParams.Instigator = this;
                 
 		GetWorld()->SpawnActor<AActor>(ClassToSpawn, SpawnTM, SpawnParams);
+
+		//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::Printf(TEXT("Spawn Class : %s"), *ClassToSpawn->GetName()));
 	}
 	
 }

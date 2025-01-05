@@ -35,6 +35,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Attack)
 	TSubclassOf<AActor> BlackHoleProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category=Attack)
+	TSubclassOf<AActor> DashProjectileClass;
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USInteractionComponet> InteractionComp;
@@ -48,6 +51,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	FTimerHandle TimerHandle_BlackHoleAttack;
 
+	UPROPERTY(VisibleAnywhere)
+	FTimerHandle TimerHandle_Dash;
+
 	void PrimaryInteract();
 
 	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
@@ -60,6 +66,10 @@ protected:
 
 	void BlackHoleAttack_TimeElapsed();
 
+	void Dash();
+
+	void Dash_TimeElapsed();
+
 
 public:	
 	// Called every frame
@@ -69,7 +79,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void MoveForward(float Value);
+	
 	void MoveRight(float Value);
+	
 	void Jump();
 	
 };

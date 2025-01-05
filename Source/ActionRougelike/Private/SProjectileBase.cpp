@@ -35,6 +35,10 @@ ASProjectileBase::ASProjectileBase()
 void ASProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SphereComp->IgnoreActorWhenMoving(GetInstigator(),true);
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::Printf(TEXT("Instigator : %s"), *GetInstigator()->GetName()));
 	
 }
 
@@ -53,7 +57,7 @@ void ASProjectileBase::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Oth
 
 void ASProjectileBase::Explode_Implementation()
 {
-	if (ensure(!IsPendingKill(EGCOptions::None)))
+	if (ensure(!IsEliminatingGarbage(EGCOptions::None)))
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactFX, GetActorLocation(), GetActorRotation());
 		
