@@ -10,6 +10,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class USInteractionComponet;
 class UAnimMontage;
+class USAttributeComponent;
 
 UCLASS()
 class ACTIONROUGELIKE_API ASCharacter : public ACharacter
@@ -24,10 +25,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<USpringArmComponent> SpringArmComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<UCameraComponent> CameraComp;
 	
 	UPROPERTY(EditAnywhere, Category = Attack)
@@ -39,7 +40,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category=Attack)
 	TSubclassOf<AActor> DashProjectileClass;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<USInteractionComponet> InteractionComp;
 
 	UPROPERTY(EditAnywhere, Category = Attack)
@@ -53,6 +54,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	FTimerHandle TimerHandle_Dash;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category="Components")
+	TObjectPtr<USAttributeComponent> AttributeComp;
 
 	void PrimaryInteract();
 

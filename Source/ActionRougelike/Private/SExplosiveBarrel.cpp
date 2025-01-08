@@ -3,6 +3,7 @@
 
 #include "SExplosiveBarrel.h"
 
+#include "SAttributeComponent.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 
 // Sets default values
@@ -43,10 +44,20 @@ void ASExplosiveBarrel::Tick(float DeltaTime)
 void ASExplosiveBarrel::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	RadialForce->FireImpulse();
+	if (ensure(OtherActor))
+	{
+		RadialForce->FireImpulse();
+        
+		FString CombinedString = FString::Printf(TEXT("Hit Location: %s"), *Hit.ImpactPoint.ToString());
+		DrawDebugString(GetWorld(), Hit.ImpactPoint, CombinedString, nullptr, FColor::Blue, 5.0f, false);
 
-	FString CombinedString = FString::Printf(TEXT("Hit Location: %s"), *Hit.ImpactPoint.ToString());
-	DrawDebugString(GetWorld(), Hit.ImpactPoint, CombinedString, nullptr, FColor::Blue, 5.0f, false);
+		USAttributeComponent* AttributeComp = OtherActor->FindComponentByClass<USAttributeComponent>();
+		//USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
 	
+		if ((AttributeComp))
+		{
+			AttributeComp->ApplyHealthChange(-50.0f);
+		}
+	}
 }
 

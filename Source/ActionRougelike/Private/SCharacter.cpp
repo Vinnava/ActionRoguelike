@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "DrawDebugHelpers.h"
+#include "SAttributeComponent.h"
 #include "SInteractionComponet.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -24,6 +25,8 @@ ASCharacter::ASCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractionComp = CreateDefaultSubobject<USInteractionComponet>("InteractionComponent");
+
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComponent");
 
 	bUseControllerRotationYaw = false;
 
@@ -198,10 +201,12 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 		Params.AddIgnoredActor(this);
 
 		
+		/*
 		//Debug Line
 		bool LineHit = GetWorld()->LineTraceSingleByObjectType(Hit, TraceStart, TraceEnd, ObjectQueryParams);
 		FColor LineColor = LineHit ? FColor::Red : FColor::Green;
 		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, LineColor, false, 5.0f, 0.0f, 1.0f);
+		*/
 
 		
 		FTransform SpawnTM;
