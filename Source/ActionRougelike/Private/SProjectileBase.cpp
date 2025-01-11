@@ -3,6 +3,7 @@
 
 #include "SProjectileBase.h"
 
+#include "SAttributeComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -28,6 +29,8 @@ ASProjectileBase::ASProjectileBase()
 	MovementComp->bInitialVelocityInLocalSpace = true;
 	MovementComp->ProjectileGravityScale = 0.0f;
 	MovementComp->InitialSpeed = 8000;
+
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComponent");
 	
 }
 

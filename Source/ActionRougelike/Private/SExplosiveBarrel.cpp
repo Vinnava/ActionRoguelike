@@ -41,23 +41,41 @@ void ASExplosiveBarrel::Tick(float DeltaTime)
 
 }
 
+
 void ASExplosiveBarrel::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (ensure(OtherActor))
+	// Ensure the OtherActor is valid
+	if (ensure(OtherActor) && OtherActor != GetInstigator()) // Prevent self-reference
 	{
 		RadialForce->FireImpulse();
-        
+
 		FString CombinedString = FString::Printf(TEXT("Hit Location: %s"), *Hit.ImpactPoint.ToString());
 		DrawDebugString(GetWorld(), Hit.ImpactPoint, CombinedString, nullptr, FColor::Blue, 5.0f, false);
 
+		FString OtherActorName = OtherActor->GetName();
+		GEngine->AddOnScreenDebugMessage(-1,10.0f,FColor::Purple,FString::Printf(TEXT("OtherActor Name: %s"), *OtherActorName));
+		
 		USAttributeComponent* AttributeComp = OtherActor->FindComponentByClass<USAttributeComponent>();
 		//USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
-	
-		if ((AttributeComp))
+		
+		if (AttributeComp) 
 		{
-			AttributeComp->ApplyHealthChange(-50.0f);
+			FString CompName = AttributeComp->GetName();
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::Printf(TEXT("Component Name: %s"), *CompName));
+			
+			AttributeComp->ApplyHealthChange(-50.0f); 
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("Attribute Component not found!"));
 		}
 	}
+	else
+	{
+		// Log a warning if OtherActor is invalid or self-reference
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, TEXT("Invalid OtherActor or self-reference."));
+	}
 }
+
 
