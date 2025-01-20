@@ -10,6 +10,7 @@ class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
 class USAttributeComponent;
+class UAudioComponent;
 
 UCLASS(Abstract)
 class ACTIONROUGELIKE_API ASProjectileBase : public AActor
@@ -38,6 +39,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	TObjectPtr<USAttributeComponent> AttributeComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	TObjectPtr<UAudioComponent> AudioComp;
+
+	UPROPERTY(EditAnywhere, Category="Audio")
+	TObjectPtr<USoundBase> FollowSound;
+
+	UPROPERTY(EditAnywhere, Category="Audio")
+	TObjectPtr<USoundBase> ImpactSound;
 
 	UFUNCTION()
 	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

@@ -4,6 +4,7 @@
 #include "SProjectileBase.h"
 
 #include "SAttributeComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -31,6 +32,9 @@ ASProjectileBase::ASProjectileBase()
 	MovementComp->InitialSpeed = 8000;
 
 	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComponent");
+
+	AudioComp = CreateDefaultSubobject<UAudioComponent>("AudioComponent");
+	AudioComp->SetupAttachment(RootComponent);
 	
 }
 
@@ -42,6 +46,13 @@ void ASProjectileBase::BeginPlay()
 	SphereComp->IgnoreActorWhenMoving(GetInstigator(),true);
 	
 	//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::Printf(TEXT("Instigator : %s"), *GetInstigator()->GetName()));
+
+	AudioComp->SetSound(FollowSound);
+	
+	if (ensure(AudioComp->Sound))
+	{
+		AudioComp->Play();
+	}
 	
 }
 
@@ -68,6 +79,13 @@ void ASProjectileBase::Explode_Implementation()
 		
 		MovementComp->StopMovementImmediately();
 		SetActorEnableCollision(false);
+
+		
+
+		if (ensure(ImpactSound))
+		{
+			UGameplayStatics::SpawnSoundAttached(ImpactSound, AudioComp);
+		}
 		
 		Destroy();
 	}
