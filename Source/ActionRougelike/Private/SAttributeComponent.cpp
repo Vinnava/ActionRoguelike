@@ -6,7 +6,8 @@
 // Sets default values for this component's properties
 USAttributeComponent::USAttributeComponent()
 {
-	Health = 100;
+	HealthMax = 100;
+	Health = HealthMax;
 	
 }
 
@@ -20,6 +21,8 @@ bool USAttributeComponent::IsAlive() const
 bool USAttributeComponent::ApplyHealthChange(float Delta)
 {
 	Health += Delta;
+
+	Health = FMath::Clamp(Health, 0.0f, HealthMax);
 
 	//UEngine::AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(FString("Health: %f"), Health));
 
