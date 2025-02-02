@@ -17,18 +17,30 @@ bool USAttributeComponent::IsAlive() const
 	return Health > 0.0f;
 }
 
+bool USAttributeComponent::IsFullHealth() const
+{
+	return Health == HealthMax;
+}
+
+float USAttributeComponent::GetHealthMax() const
+{
+	return HealthMax;
+}
+
 
 bool USAttributeComponent::ApplyHealthChange(float Delta)
 {
-	Health += Delta;
-
-	Health = FMath::Clamp(Health, 0.0f, HealthMax);
-
+	float OldHealth = Health;
+	
+	Health = FMath::Clamp(Health + Delta, 0.0f, HealthMax);
+	
 	//UEngine::AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(FString("Health: %f"), Health));
 
-	OnHealthChanged.Broadcast(nullptr, this, Health, Delta);
-
-	return true;
+	float ActualDelta = Health - OldHealth;
+	OnHealthChanged.Broadcast(nullptr, this, Health, ActualDelta); // @fixme: Still nullptr for InstigatorActor parameter
+	//OnHealthChanged.Broadcast(nullptr, this, Health, Delta);
+	
+	return ActualDelta != 0;
 	
 }
 

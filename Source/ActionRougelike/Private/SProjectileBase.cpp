@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "UObject/FastReferenceCollector.h"
+#include "Camera/CameraShakeBase.h"
 
 // Sets default values
 ASProjectileBase::ASProjectileBase()
@@ -35,6 +36,10 @@ ASProjectileBase::ASProjectileBase()
 
 	AudioComp = CreateDefaultSubobject<UAudioComponent>("AudioComponent");
 	AudioComp->SetupAttachment(RootComponent);
+
+	ImpactShakeInnerRadius = 0.0f;
+	ImpactShakeOuterRadius = 1500.0f;
+
 	
 }
 
@@ -63,11 +68,14 @@ void ASProjectileBase::Tick(float DeltaTime)
 
 }
 
+
 void ASProjectileBase::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
 	Explode();
+	
 }
+
 
 void ASProjectileBase::Explode_Implementation()
 {
@@ -81,16 +89,18 @@ void ASProjectileBase::Explode_Implementation()
 		SetActorEnableCollision(false);
 
 		
-
 		if (ensure(ImpactSound))
 		{
-			UGameplayStatics::SpawnSoundAttached(ImpactSound, AudioComp);
+			UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
 		}
+		
+		UGameplayStatics::PlayWorldCameraShake(this, ImpactShake, GetActorLocation(), ImpactShakeInnerRadius, ImpactShakeOuterRadius);
 		
 		Destroy();
 	}
 	
 }
+
 
 void ASProjectileBase::PostInitializeComponents()
 {

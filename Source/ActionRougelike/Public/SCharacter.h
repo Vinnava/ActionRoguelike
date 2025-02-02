@@ -11,6 +11,7 @@ class UCameraComponent;
 class USInteractionComponet;
 class UAnimMontage;
 class USAttributeComponent;
+class UParticleSystem;
 
 UCLASS()
 class ACTIONROUGELIKE_API ASCharacter : public ACharacter
@@ -33,6 +34,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<UCameraComponent> CameraComp;
 	
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	FName TimeToHitParamName;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	FName HandSocketName;
+	
 	UPROPERTY(EditAnywhere, Category = Attack)
 	TSubclassOf<AActor> ProjectileClass;
 
@@ -47,6 +54,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Attack)
 	TObjectPtr<UAnimMontage> AttackAnim;
+
+	/* Particle System played during attack animation */
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TObjectPtr<UParticleSystem> CastingEffect;
 
 	UPROPERTY(VisibleAnywhere)
 	FTimerHandle TimerHandle_PrimaryAttack;
@@ -75,6 +86,8 @@ protected:
 	void Dash();
 
 	void Dash_TimeElapsed();
+
+	void StartAttackEffects();
 
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);

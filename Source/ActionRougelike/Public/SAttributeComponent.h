@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SMagicProjectile.h"
 #include "Components/ActorComponent.h"
 #include "SAttributeComponent.generated.h"
 
@@ -21,7 +22,10 @@ public:
 	USAttributeComponent();
 
 protected:
+//Functions
 
+	
+//Variables
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Attributes")
 	float Health;
 
@@ -29,14 +33,22 @@ protected:
 	float HealthMax;
 
 public:
-
-	UPROPERTY(BlueprintAssignable, Category="Attributes")
-	FOnHealthChanged OnHealthChanged;
-
+//Function
 	UFUNCTION(BlueprintCallable, Category="Attributes")
 	bool ApplyHealthChange(float Delta);
 
 	UFUNCTION(BlueprintCallable, Category="Attributes")
 	bool IsAlive() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsFullHealth() const;
+	
+	UFUNCTION(BlueprintCallable)
+	float GetHealthMax() const;
+
+	//Variables
+	UPROPERTY(BlueprintAssignable, Category="Attributes")
+	FOnHealthChanged OnHealthChanged;
+
 	
 };

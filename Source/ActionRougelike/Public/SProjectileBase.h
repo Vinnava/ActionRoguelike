@@ -11,6 +11,7 @@ class UProjectileMovementComponent;
 class UParticleSystemComponent;
 class USAttributeComponent;
 class UAudioComponent;
+class UCameraShakeBase;
 
 UCLASS(Abstract)
 class ACTIONROUGELIKE_API ASProjectileBase : public AActor
@@ -48,6 +49,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category="Audio")
 	TObjectPtr<USoundBase> ImpactSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects|Shake")
+	TSubclassOf<UCameraShakeBase> ImpactShake;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Effects|Shake")
+	float ImpactShakeInnerRadius;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Effects|Shake")
+	float ImpactShakeOuterRadius;
 
 	UFUNCTION()
 	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

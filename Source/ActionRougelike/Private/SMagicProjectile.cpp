@@ -42,13 +42,14 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	if (OtherActor && OtherActor != GetInstigator())
 	{
-		if (USAttributeComponent* LocalAttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
+		if (USAttributeComponent* LocAttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
 		{
 			// minus in front of DamageAmount to apply the change as damage, not healing
-			LocalAttributeComp->ApplyHealthChange(-DamageAmount);
+			LocAttributeComp->ApplyHealthChange(-DamageAmount);
 			
 			Explode();
 			
 		}
+		
 	}
 }
