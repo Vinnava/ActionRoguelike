@@ -4,6 +4,7 @@
 #include "SMagicProjectile.h"
 
 #include "SAttributeComponent.h"
+#include "SCharacter.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -40,10 +41,13 @@ void ASMagicProjectile::Tick(float DeltaTime)
 void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Emerald, FString::Printf(TEXT("OtherActor : %s"), *OtherActor->GetName()));
 	if (OtherActor && OtherActor != GetInstigator())
 	{
 		if (USAttributeComponent* LocAttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
 		{
+			ASCharacter* player=Cast<ASCharacter>(OtherActor);
+			if (!OtherActor) DamageAmount = DamageAmount*4;
 			// minus in front of DamageAmount to apply the change as damage, not healing
 			LocAttributeComp->ApplyHealthChange(-DamageAmount);
 			

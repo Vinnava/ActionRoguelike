@@ -3,6 +3,7 @@
 
 #include "SPowerupActor.h"
 
+#include "SCharacter.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values
@@ -13,7 +14,7 @@ ASPowerupActor::ASPowerupActor()
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComponent");
 	SetRootComponent(SphereComp);
-
+	
 	RespawnTime = 10.0f;
 
 }
@@ -22,6 +23,14 @@ ASPowerupActor::ASPowerupActor()
 void ASPowerupActor::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
+
+void ASPowerupActor::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASPowerupActor::OnComponentBeginOverlap);
 	
 }
 
@@ -65,3 +74,12 @@ void ASPowerupActor::SetPowerupState(bool bIsNewActive)
 	
 }
 
+void ASPowerupActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	//APawn* InstigatorPawn = Cast<APawn>(OtherActor);
+	ASCharacter* player = Cast<ASCharacter>(OtherActor);
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Emerald, FString::Printf(TEXT("1.PowerUpOtherActor : %s"), *OtherActor->GetName()));
+	if (!player) return;
+	Execute_Interact(this, CastChecked<APawn>(OtherActor));
+}

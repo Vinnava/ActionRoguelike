@@ -213,6 +213,7 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
 		ObjectQueryParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+		ObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
 
 		FCollisionShape Shape;
 		Shape.SetSphere(20.0f);
@@ -236,7 +237,7 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 		
 		if (GetWorld()->SweepSingleByObjectType(Hit, TraceStart, TraceEnd, FQuat::Identity, ObjectQueryParams, Shape, Params))
 		{
-			//DrawDebugSphere(GetWorld(), Hit.Location, 10.0f, 32, FColor::Red, false, 2.0f);
+			DrawDebugSphere(GetWorld(), Hit.Location, 10.0f, 32, FColor::Red, false, 2.0f);
 			SpawnRot = UKismetMathLibrary::FindLookAtRotation(HandLocation, Hit.Location);
 		}
 		else
@@ -258,13 +259,12 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 }
 
 
-void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth,float Delta)
+void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
 	if (Delta < 0.0f)
 	{
 		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
 	}
-	
 	
 	if (NewHealth <= 0.0f && Delta <= 0.0f)
 	{
@@ -275,7 +275,6 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 	if (Delta < 0.0f)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::Printf(TEXT("Delta : %f"), Delta));
-		ASCharacter::GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);
+		ASCharacter::GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
 	}
-	
 }

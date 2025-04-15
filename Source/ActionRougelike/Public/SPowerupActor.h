@@ -14,21 +14,39 @@ class ACTIONROUGELIKE_API ASPowerupActor : public AActor, public ISGameplayInter
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+//FUNCTIONS
 	// Sets default values for this actor's properties
 	ASPowerupActor();
+			
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void Interact_Implementation(APawn* InstigatorPawn);
+
+//VARIABLES
+
+
 
 protected:
+//FUNCTIONS		
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-//FUNCTIONS
+	virtual void PostInitializeComponents() override;
+	
 	void ShowPowerup();
 
 	void HideAndCooldownPowerup();
 
 	void SetPowerupState(bool bIsNewActive);
 
+	UFUNCTION()
+	virtual void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+	const FHitResult& SweepResult);
+	
 
 //VARIABLES
 	FTimerHandle TimerHandle_RespawnTimer;
@@ -39,11 +57,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Time")
 	float RespawnTime;
 
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	void Interact_Implementation(APawn* InstigatorPawn);
-
 };
+
+
+
