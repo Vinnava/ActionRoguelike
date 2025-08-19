@@ -8,9 +8,7 @@ USAttributeComponent::USAttributeComponent()
 {
 	HealthMax = 100;
 	Health = HealthMax;
-	
 }
-
 
 bool USAttributeComponent::IsAlive() const
 {
@@ -27,6 +25,10 @@ float USAttributeComponent::GetHealthMax() const
 	return HealthMax;
 }
 
+float USAttributeComponent::GetHealth() const
+{
+	return Health;
+}
 
 bool USAttributeComponent::ApplyHealthChange(float Delta)
 {

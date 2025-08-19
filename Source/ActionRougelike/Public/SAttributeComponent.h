@@ -20,6 +20,9 @@ class ACTIONROUGELIKE_API USAttributeComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	USAttributeComponent();
+	
+	/*UFUNCTION(BlueprintCallable, Category = "Attributes")
+    static USAttributeComponent* GetAttributes(AActor* FromActor);*/
 
 protected:
 //Functions
@@ -45,6 +48,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	float GetHealthMax() const;
+	
+	UFUNCTION(BlueprintCallable)
+	float GetHealth() const;
 
 	//Variables
 	UPROPERTY(BlueprintAssignable, Category="Attributes")
