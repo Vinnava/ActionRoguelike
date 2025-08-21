@@ -17,6 +17,7 @@ ASAICharacter::ASAICharacter()
 
 	TimeToHitParamName = "HitFlashTime";
 
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 void ASAICharacter::PostInitializeComponents()

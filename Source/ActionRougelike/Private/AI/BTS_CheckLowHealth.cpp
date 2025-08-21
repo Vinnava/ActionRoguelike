@@ -7,11 +7,6 @@
 #include "SAttributeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
-UBTS_CheckLowHealth::UBTS_CheckLowHealth()
-{
-	LowHealthFraction = 0.3f;
-}
-
 void UBTS_CheckLowHealth::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
