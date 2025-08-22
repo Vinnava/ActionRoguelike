@@ -49,11 +49,9 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 			ASCharacter* player=Cast<ASCharacter>(OtherActor);
 			if (!OtherActor) DamageAmount = DamageAmount*4;
 			// minus in front of DamageAmount to apply the change as damage, not healing
-			LocAttributeComp->ApplyHealthChange(-DamageAmount);
+			LocAttributeComp->ApplyHealthChange(GetInstigator(), -DamageAmount);
 			
 			Explode();
-			
 		}
-		
 	}
 }

@@ -64,7 +64,7 @@ void ASExplosiveBarrel::OnComponentHit(UPrimitiveComponent* HitComponent, AActor
 			FString CompName = AttributeComp->GetName();
 			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::Printf(TEXT("Component Name: %s"), *CompName));
 			
-			AttributeComp->ApplyHealthChange(-50.0f); 
+			AttributeComp->ApplyHealthChange(OtherActor, -50.0f); 
 		}
 		else
 		{

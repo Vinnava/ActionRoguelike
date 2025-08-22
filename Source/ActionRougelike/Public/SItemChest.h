@@ -25,18 +25,10 @@ public:
 
 	
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UStaticMeshComponent> BaseMesh;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UStaticMeshComponent> LidMesh;
-	
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 };
