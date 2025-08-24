@@ -30,8 +30,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Effects")
 	FName TimeToHitParamName;
-	
-//Functions
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> HealthBarWidgetClass;
+
+	class USWorldUserWidget* ActiveHealthBarWidget;
+
+	//Functions
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
 
