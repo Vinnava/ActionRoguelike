@@ -7,6 +7,9 @@
 #include "SGameplayInterface.h"
 #include "StaticMeshAttributes.h"
 
+static TAutoConsoleVariable<bool> CVarDebugDrawInteraction(TEXT("su.InteractionDebugDraw"), true, TEXT("Enable debug Draw for interactions"), ECVF_Cheat);
+
+
 // Sets default values for this component's properties
 USInteractionComponet::USInteractionComponet()
 {
@@ -39,6 +42,7 @@ void USInteractionComponet::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 void USInteractionComponet::PrimaryInteract()
 {
+	bool bDrawDebug = CVarDebugDrawInteraction.GetValueOnGameThread();
 	//AActor* MyOwner = GetOwner();
 	TObjectPtr<AActor> MyOwner = GetOwner();
 	
@@ -74,7 +78,7 @@ void USInteractionComponet::PrimaryInteract()
 				TObjectPtr<APawn> MyPawn = Cast<APawn>(MyOwner);
 				ISGameplayInterface::Execute_Interact(HitActor, MyPawn);
 
-				DrawDebugSphere(GetWorld(), HitResult.Location, Radius, 32, SphereColor, false, 2.0f);
+				if (bDrawDebug) DrawDebugSphere(GetWorld(), HitResult.Location, Radius, 32, SphereColor, false, 2.0f);
 				
 				break;
 			}

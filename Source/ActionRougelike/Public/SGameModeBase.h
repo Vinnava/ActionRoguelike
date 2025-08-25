@@ -36,10 +36,15 @@ protected:
 
 	UFUNCTION()
 	void SpawnTimerElapsed();
+
+	UFUNCTION()
+	void RespawnPlayerElapsed(AController* Controller);
 	
 public:
 	virtual void StartPlay() override;
 	
 	UFUNCTION(Exec)
 	void KillAll();
+
+	virtual void OnActorKilled(AActor* VictimActor, AActor* Killer);
 };
