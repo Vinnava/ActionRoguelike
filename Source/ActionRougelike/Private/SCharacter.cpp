@@ -127,6 +127,11 @@ void ASCharacter::Jump()
 	
 }
 
+void ASCharacter::HealSelf(float Amount)
+{
+	AttributeComp->ApplyHealthChange(this, Amount);
+}
+
 void ASCharacter::PrimaryInteract()
 {
 	if (InteractionComp)

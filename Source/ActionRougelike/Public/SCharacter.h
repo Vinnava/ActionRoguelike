@@ -105,6 +105,9 @@ public:
 	void MoveRight(float Value);
 	
 	void Jump();
+
+	UFUNCTION(Exec)
+	void HealSelf(float Amount = 100);
 	
 };
 
