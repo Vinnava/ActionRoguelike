@@ -37,21 +37,6 @@ void ASGameModeBase::KillAll()
 	}
 }
 
-void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* Killer)
-{
-	ASCharacter* Player = Cast<ASCharacter>(VictimActor);
-	if (Player)
-	{
-		FTimerHandle TimerHandle_RespawnDelay;
-
-		FTimerDelegate Delegate;
-		Delegate.BindUFunction(this, "RespawnPlayerElapsed", Player->GetController());
-
-		float RespawnDelay = 2.0f;
-		GetWorldTimerManager().SetTimer(TimerHandle_RespawnDelay, Delegate, RespawnDelay, false);
-	}
-}
-
 void ASGameModeBase::SpawnTimerElapsed()
 {
 	if (!CVarSpawnBots.GetValueOnGameThread())
@@ -87,6 +72,21 @@ void ASGameModeBase::SpawnTimerElapsed()
 	if (ensure(QueryInstance))
 	{
 		QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this, &ASGameModeBase::OnQueryCompleted);
+	}
+}
+
+void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* Killer)
+{
+	ASCharacter* Player = Cast<ASCharacter>(VictimActor);
+	if (Player)
+	{
+		FTimerHandle TimerHandle_RespawnDelay;
+
+		FTimerDelegate Delegate;
+		Delegate.BindUObject(this, &ASGameModeBase::RespawnPlayerElapsed, Player->GetController());
+
+		float RespawnDelay = 2.0f;
+		GetWorldTimerManager().SetTimer(TimerHandle_RespawnDelay, Delegate, RespawnDelay, false);
 	}
 }
 

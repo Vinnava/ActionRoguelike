@@ -229,12 +229,13 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 		Params.AddIgnoredActor(this);
 
 		
+		
 		/*
 		//Debug Line
 		bool LineHit = GetWorld()->LineTraceSingleByObjectType(Hit, TraceStart, TraceEnd, ObjectQueryParams);
 		FColor LineColor = LineHit ? FColor::Red : FColor::Green;
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, LineColor, false, 5.0f, 0.0f, 1.0f);
-		*/
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, LineColor, false, 5.0f, 0.0f, 1.0f);*/
+		
 
 		
 		FTransform SpawnTM;
@@ -280,7 +281,7 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 	if (Delta < 0.0f)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::Printf(TEXT("Delta : %f"), Delta));
-		ASCharacter::GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
+		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
 	}
 }
 
