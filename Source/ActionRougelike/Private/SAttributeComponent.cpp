@@ -9,6 +9,15 @@ static TAutoConsoleVariable<float> CVarDamageMultiplier(
 	TEXT("su.DamageMultiplier"), 1.0f, TEXT("Global Damage Modifier for Attribute Component"), ECVF_Cheat);
 
 
+USAttributeComponent* USAttributeComponent::GetAttributes(AActor* FromActor)
+{
+	if (FromActor)
+	{
+		return Cast<USAttributeComponent>(FromActor->GetComponentByClass(StaticClass()));
+	}
+	return nullptr;
+}
+
 // Sets default values for this component's properties
 USAttributeComponent::USAttributeComponent()
 {
@@ -75,14 +84,6 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	return ActualDelta != 0;
 }
 
-USAttributeComponent* USAttributeComponent::GetAttributes(AActor* FromActor)
-{
-	if (FromActor)
-	{
-		return Cast<USAttributeComponent>(FromActor->GetComponentByClass(USAttributeComponent::StaticClass()));
-	}
-	return nullptr;
-}
 
 bool USAttributeComponent::IsActorAlive(AActor* FromActor)
 {

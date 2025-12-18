@@ -21,7 +21,7 @@ EBTNodeResult::Type USBTT_RangedAttack::ExecuteTask(UBehaviorTreeComponent& Owne
 	if (ensure(MyController))
 	{
 		ACharacter* MyPawn = Cast<ACharacter>(MyController->GetPawn());
-		if (ensure(MyPawn==nullptr))
+		if (MyPawn==nullptr)
 		{
 			return EBTNodeResult::Failed;
 		}

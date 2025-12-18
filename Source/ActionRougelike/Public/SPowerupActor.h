@@ -23,7 +23,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void Interact_Implementation(APawn* InstigatorPawn);
+	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
 
 //VARIABLES
 
@@ -57,6 +57,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Time")
 	float RespawnTime;
 
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<UStaticMeshComponent> MeshComp;
 };
 
 

@@ -5,10 +5,10 @@
 
 #include "SAttributeComponent.h"
 
-// Sets default values
+//Sets default values
 ASTargetDummy::ASTargetDummy()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	//Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
@@ -22,7 +22,8 @@ void ASTargetDummy::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	// Trigger when health is changed (damage/healing)
+	//Trigger when health is changed (damage/healing)
+	AttributeComp->OnHealthChanged.RemoveDynamic(this, &ASTargetDummy::OnHealthChanged);
 	AttributeComp->OnHealthChanged.AddDynamic(this, &ASTargetDummy::OnHealthChanged);
 }
 
