@@ -37,57 +37,29 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Effects")
 	FName TimeToHitParamName;
 	
-	UPROPERTY(VisibleAnywhere, Category = "Effects")
-	FName HandSocketName;
-	
-	UPROPERTY(EditAnywhere, Category = Attack)
-	TSubclassOf<AActor> ProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = Attack)
-	TSubclassOf<AActor> BlackHoleProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category=Attack)
-	TSubclassOf<AActor> DashProjectileClass;
-	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<USInteractionComponet> InteractionComp;
 
 	UPROPERTY(EditAnywhere, Category = Attack)
 	TObjectPtr<UAnimMontage> AttackAnim;
 
-	/* Particle System played during attack animation */
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TObjectPtr<UParticleSystem> CastingEffect;
-
-	UPROPERTY(VisibleAnywhere)
-	FTimerHandle TimerHandle_PrimaryAttack;
-
-	UPROPERTY(VisibleAnywhere)
-	FTimerHandle TimerHandle_BlackHoleAttack;
-
-	UPROPERTY(VisibleAnywhere)
-	FTimerHandle TimerHandle_Dash;
-
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category="Components")
 	TObjectPtr<USAttributeComponent> AttributeComp;
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category="Components")
+	TObjectPtr<class USActionComponent> ActionComp;
 
 	void PrimaryInteract();
 
-	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
-
 	void PrimaryAttack();
-
-	void PrimaryAttack_TimeElapsed();
 
 	void BlackHoleAttack();
 
-	void BlackHoleAttack_TimeElapsed();
-
 	void Dash();
-
-	void Dash_TimeElapsed();
-
-	void StartAttackEffects();
+	
+	void StartSprint();
+	
+	void StopSprint();
 
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
@@ -109,6 +81,10 @@ public:
 
 	UFUNCTION(Exec)
 	void HealSelf(float Amount = 100);
+	
+	UCameraComponent* GetCameraComponent() const { return CameraComp; }
+	
+	USpringArmComponent* GetSpringArmComponent() const { return SpringArmComp; }
 	
 };
 

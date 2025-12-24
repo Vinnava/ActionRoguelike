@@ -94,6 +94,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("BlackHoleAttack", IE_Pressed, this, &ASCharacter::BlackHoleAttack);
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &ASCharacter::Dash);
+	
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ASCharacter::StartSprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ASCharacter::StopSprint);
 
 }
 
@@ -173,11 +176,9 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 		SpawnProjectile(ProjectileClass);
 }
 
-
-void ASCharacter::BlackHoleAttack_TimeElapsed()
+void ASCharacter::StartSprint()
 {
-	if (ensure(BlackHoleProjectileClass))
-		SpawnProjectile(BlackHoleProjectileClass);
+	ActionComp->StartActionByName(this, "Sprint");
 }
 
 

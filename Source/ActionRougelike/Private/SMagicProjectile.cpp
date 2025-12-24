@@ -42,6 +42,7 @@ void ASMagicProjectile::Tick(float DeltaTime)
 void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Magenta, TEXT("OnActorOverlap"));
 	if (OtherActor && OtherActor != GetInstigator())
 	{
 		/*if (USAttributeComponent* LocAttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
@@ -59,5 +60,9 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 			//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::Printf(TEXT("Explode")));
 			Explode();
 		}
+	}
+	else
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, TEXT("Invalid OtherActor or self-reference."));
 	}
 }
